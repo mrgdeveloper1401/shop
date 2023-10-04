@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
-from accounts.managers import UserManager
+from accounts.managers import UsersManager
 
 class User(AbstractUser):
     mobile_phone = models.CharField(_('mobile_phone'), max_length=11, unique=True, blank=True)
@@ -10,7 +10,7 @@ class User(AbstractUser):
         'female', 'female'
     )
     gender_choose = models.CharField(_('gender'), max_length=6, blank=True, choices=gender, default='male')
-    objects = UserManager()
+    objects = UsersManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username', 'mobile_phone', 'first_name', 'last_name') 
     
