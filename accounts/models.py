@@ -9,7 +9,7 @@ class Users(AbstractUser):
         ('male', 'male'),
         ('female', 'female'),
     )
-    email = models.EmailField(_("email address"), blank=True, unique=True)
+    email = models.EmailField(_("email address"), unique=True)
     gender_choose = models.CharField(_('gender'), max_length=6, blank=True, choices=gender, default='male')
     objects = UsersManager()
     EMAIL_FIELD = 'email'

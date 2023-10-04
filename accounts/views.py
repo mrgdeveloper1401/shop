@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from .form import UserRegisterForm
 import random
 from shop.utils import send_otp_code
 from .models import Otpcode
-from .form import VerifyAccountsForm
+from .form import VerifyAccountsForm, UserloginForm
 from .models import Users
 
 
@@ -65,3 +66,26 @@ class UserRegisterVerifyCode(View):
             else:
                 messages.error(request, 'wrong code', 'error')
                 return redirect('accounts:account_verify')
+            
+            
+class LoginView(View):
+    form_class = UserloginForm
+    temlated_name = 'accounts/login.html'
+    
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.temlated_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, email=cd['email'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                messages.success(request,'successfully login','success')
+                # return redirect('shop:home')
+            else:
+                messages.error(request, 'wrong username or password', 'error')
+                return redirect('accounts:login')
+        return render(request, self.temlated_name, {'form': form})
