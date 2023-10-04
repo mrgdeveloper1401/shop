@@ -2,11 +2,12 @@
 
 {% block title %}
     <title>register user</title>
-{% endblock title %}
+{% endblock %}
 
 {% block content %}
-    <form class='' method='post'>
+    <form method='post' action='' novalidate>
         {% csrf_token %}
         {{ form }}
+        <input type='submit' value='create account'>
     </form>
 {% endblock  %}
