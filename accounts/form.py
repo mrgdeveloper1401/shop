@@ -62,7 +62,34 @@ class UserRegisterForm(forms.ModelForm):
     class Meta:
         model = Users
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
+        widgets = {
+            'username': forms.TextInput(),
+            'email': forms.EmailInput(),
+            'first_name': forms.TextInput(),
+            'last_name': forms.TextInput(),
+            'password': forms.PasswordInput()
+        }
+        error_messages = {
+            'username': {
+                'required': 'please enter username.'
+            },
+            'email': {
+                'required': 'please enter email address.',
+            },
+            'first_name': {
+                'required': 'please enter first name.',
+            },
+            'last_name': {
+                'required': 'please enter last name.',
+            },
+            'password': {
+               'required': 'please enter password.',
+            },
+            'password2': {
+               'required': 'please enter password confirmation.',}
+            
+        }
         
         
-class VerifyAccountsForm(forms.forms):
+class VerifyAccountsForm(forms.Form):
     code = forms.IntegerField()
