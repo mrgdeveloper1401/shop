@@ -34,4 +34,4 @@ class Otpcode(models.Model):
     created_at = models.DateTimeField(_('create code'), auto_now_add=True)
     
     def __str__(self) -> str:
-        return f'{self.email} -- self{self.code}'
+        return f'{self.email} -- {self.code}'

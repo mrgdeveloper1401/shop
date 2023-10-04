@@ -5,6 +5,8 @@ from .form import UserRegisterForm
 import random
 from shop.utils import send_otp_code
 from .models import Otpcode
+from .form import VerifyAccountsForm
+from .models import Users
 
 
 
@@ -37,8 +39,29 @@ class UserRegisterView(View):
     
 
 class UserRegisterVerifyCode(View):
+    form_class = VerifyAccountsForm
     def get(self, request):
-        pass
+        form = self.form_class()
+        return render(request, 'accounts/verify_account.html', {'form': form})
     
     def post(self, request):
-        pass
+        user_session = request.session['user_register_info']
+        code_instance = Otpcode.objects.get(email=user_session['email'])
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            if cd['code'] == code_instance.code:
+                user = Users.objects.create_user(
+                    username=user_session['username'],
+                    email=user_session['email'],
+                    first_name=user_session['first_name'],
+                    last_name=user_session['last_name'],
+                    password=user_session['password']
+                )
+                code_instance.delete()
+                user.save()
+                messages.success(request,'successfully registered account and we send code for verify account','success')
+                return redirect('accounts:login')
+            else:
+                messages.error(request, 'wrong code', 'error')
+                return redirect('accounts:account_verify')

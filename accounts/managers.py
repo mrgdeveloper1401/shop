@@ -2,7 +2,7 @@ from django.contrib.auth.models import BaseUserManager, UserManager
 
 
 class UsersManager(UserManager):
-    def create_user(self, username, email, first_name, last_name, mobile_phone,  password=None):
+    def create_user(self, username, email, first_name, last_name,  password=None):
         if not username:
             raise ValueError('please enter username')
         if not first_name:
@@ -15,8 +15,7 @@ class UsersManager(UserManager):
             username=username,
             email=self.normalize_email(email),
             first_name=first_name,
-            last_name=last_name,
-            mobile_phone=mobile_phone)
+            last_name=last_name,)
         user.set_password(password)
         user.save(using=self._db)
         return user
