@@ -1,5 +1,5 @@
 from django.test import TestCase
-from accounts.form import UserRegisterForm, UserloginForm
+from accounts.form import UserRegisterForm
 from accounts.models import Users
 from model_bakery import baker
 
