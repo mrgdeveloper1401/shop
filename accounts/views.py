@@ -2,11 +2,11 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .form import UserRegisterForm
 import random
+from .form import UserRegisterForm
 from shop.utils import send_otp_code
 from .models import Otpcode
-from .form import VerifyAccountsForm, UserloginForm
+from .form import VerifyAccountsForm, UserLoginForm
 from .models import Users
 
 
@@ -69,7 +69,7 @@ class UserRegisterVerifyCodeView(View):
             
             
 class LoginView(View):
-    form_class = UserloginForm
+    form_class = UserLoginForm
     temlated_name = 'accounts/login.html'
     
     def get(self, request):
@@ -84,7 +84,7 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request,'successfully login','success')
-                # return redirect('shop:home')
+                return redirect('accounts:singup')
             else:
                 messages.error(request, 'wrong username or password', 'error')
                 return redirect('accounts:login')

@@ -93,21 +93,10 @@ class UserRegisterForm(forms.ModelForm):
         
 class VerifyAccountsForm(forms.Form):
     code = forms.IntegerField()
-    
 
-class UserloginForm(forms.ModelForm):
-    class Meta:
-        model = Users
-        fields = ('email', 'password')
-        widgets = {
-            'email': forms.EmailInput(),
-            'password': forms.PasswordInput()
-        }
-        error_messages = {
-            'email': {
-               'required': 'please enter email address.',
-            },
-            'password': {
-              'required': 'please enter password.',
-            }
-        }
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(),
+                             error_messages={'required': 'please enter email address'}, max_length=255)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(),
+                               error_messages={'required': 'please enter password'} , max_length=255)
