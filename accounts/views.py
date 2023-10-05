@@ -39,7 +39,7 @@ class UserRegisterView(View):
         return render(request, self.template_name, {'form': form})
     
 
-class UserRegisterVerifyCode(View):
+class UserRegisterVerifyCodeView(View):
     form_class = VerifyAccountsForm
     def get(self, request):
         form = self.form_class()

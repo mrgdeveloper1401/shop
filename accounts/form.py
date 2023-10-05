@@ -63,7 +63,7 @@ class UserRegisterForm(forms.ModelForm):
         model = Users
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
         widgets = {
-            'username': forms.TextInput(required=True),
+            'username': forms.TextInput(),
             'email': forms.EmailInput(),
             'first_name': forms.TextInput(),
             'last_name': forms.TextInput(),
