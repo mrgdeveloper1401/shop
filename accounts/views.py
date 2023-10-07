@@ -87,7 +87,7 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request,'successfully login','success')
-                return redirect('accounts:singup')
+
             else:
                 messages.error(request, 'wrong username or password', 'error')
                 return redirect('accounts:login')
