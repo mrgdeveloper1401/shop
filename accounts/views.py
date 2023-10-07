@@ -1,7 +1,10 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import views as auth_views
 import random
 from .form import UserRegisterForm
 from shop.utils import send_otp_code
@@ -89,3 +92,29 @@ class LoginView(View):
                 messages.error(request, 'wrong username or password', 'error')
                 return redirect('accounts:login')
         return render(request, self.temlated_name, {'form': form})
+    
+
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        if request.user.is_authenticated == request.user.id:
+            logout(request)
+        messages.error(request, 'invalid', 'warning')
+
+
+class UserPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    email_template_name = 'accounts/password_reset_email.html'
+    
+    
+class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+    
+    
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+    
+
+class UserPasswordResetComplateView(auth_views.PasswordResetCompleteView):
+    template_name = 'accounts/password_reset_complete.html'

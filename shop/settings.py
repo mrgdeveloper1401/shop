@@ -137,4 +137,4 @@ EMAIL_HOST_USER = 'm.goodarzi606@gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'kzxkjyjtucviutku'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'shop website'
+DEFAULT_FROM_EMAIL = 'shop'
