@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 
@@ -9,6 +10,9 @@ class ProductModel(models.Model):
     image = models.ImageField(_('Image'))
     price = models.DecimalField(_('Price'), decimal_places=3)
     slug = models.SlugField(_('Slug'), unique=True)
+    create_at = models.DateTimeField(_('Create at'), auto_now_add=True)
+    update_at = models.DateTimeField(_('Update at'), default=timezone.now)
+    is_active = models.BooleanField(_('Is active'), default=True)
     
     
     def __str__(self) -> str:
