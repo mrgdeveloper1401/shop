@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
-    'product.apps.ProductConfig',
     
 ]
 
@@ -133,7 +132,7 @@ MEDIA_ROOT = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.Users'
+AUTH_USER_MODEL = 'accounts.UsersModel'
 
 
 # Google account

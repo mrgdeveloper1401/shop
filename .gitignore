@@ -132,6 +132,10 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+/SHOP-VENV
+SHOP-VENV
+.SHOP-VENV
+SHOP-VENV/
 .env
 .venv
 SHOP
@@ -142,6 +146,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+/
 
 # Spyder project settings
 .spyderproject

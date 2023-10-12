@@ -1,18 +1,17 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 from .form import UsersCreationForms, UsersChangeForms
-from accounts.models import Users, Otpcode
+from .models import UsersModel, Otpcode, UserMoreInformationModel, UserWalletModel
 
 
-@admin.register(Users)
-class UsersAdmin(UserAdmin):
+@admin.register(UsersModel)
+class UsersAdmin(admin.ModelAdmin):
     add_form_template = "admin/auth/user/add_form.html"
     change_user_password_template = None
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (None, {"fields": ("email", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "username")}),
         (
             _("Permissions"),
             {
@@ -20,8 +19,8 @@ class UsersAdmin(UserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "groups",
-                    "user_permissions",
+                    # "groups",
+                    # "user_permissions",
                 ),
             },
         ),
@@ -32,22 +31,34 @@ class UsersAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "password1", "password2"),
+                "fields": ("email", "password1", "password2"),
             },
         ),
     )
     form = UsersChangeForms
     add_form = UsersCreationForms
     change_password_form = AdminPasswordChangeForm
-    list_display = ("username", "email", "first_name", "last_name", "is_staff")
-    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
-    search_fields = ("username", "first_name", "last_name", "email")
-    ordering = ("username",)
-    filter_horizontal = (
-        "groups",
-        "user_permissions",
-    )
+    list_display = ("username", "email", "first_name", "last_name", "is_staff", 'is_active', 'is_superuser')
+    list_filter = ("is_staff", "is_superuser", "is_active")
+    search_fields = ("mobile_phone", "first_name", "last_name", "email")
+    # ordering = ("emai",)
+    # filter_horizontal = (
+    #     "groups",
+    #     "user_permissions",
+    # )
     
+    
+@admin.register(UserMoreInformationModel)
+class UserInformationAdmin(admin.ModelAdmin):
+    list_display = ('province', 'thonship', 'city', 'postal_code')
+    list_filter = ("province", "thonship", "city", 'create_at')
+
+
+@admin.register(UserWalletModel)
+class UserWalletAdmin(admin.ModelAdmin):
+    list_display = ('user', 'balance')
+    list_filter = ('user', 'create_at')
+
 
 @admin.register(Otpcode)
 class OtpCodeAdmin(admin.ModelAdmin):
