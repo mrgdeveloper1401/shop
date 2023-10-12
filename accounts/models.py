@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser
-# from accounts.managers import UsersManager
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser
+from accounts.managers import UsersManager
 from django.utils import timezone
 
 
@@ -25,6 +25,17 @@ class UsersModel(AbstractBaseUser):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'mobile_phone']
+    objects = UsersManager()
+    
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
@@ -55,7 +66,7 @@ class UserMoreInformationModel(models.Model):
     address = models.CharField(_('Address'), max_length=100,
                                 help_text='enter address')
     postal_code = models.CharField(_('Postal Code'), max_length=10)
-    birth_day = models.DateField(_('Birthday'), null=True, blank=True)
+    birth_day = models.DateField(_('Birthday'), null=True, blank=True, default=timezone.now)
     create_at = models.DateTimeField(_('create at'), auto_now_add=True)
     update_at = models.DateTimeField(_('update at'), auto_now=True)
     

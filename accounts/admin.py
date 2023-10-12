@@ -3,10 +3,11 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 from .form import UsersCreationForms, UsersChangeForms
 from .models import UsersModel, Otpcode, UserMoreInformationModel, UserWalletModel
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 @admin.register(UsersModel)
-class UsersAdmin(admin.ModelAdmin):
+class UsersAdmin(BaseUserAdmin):
     add_form_template = "admin/auth/user/add_form.html"
     change_user_password_template = None
     fieldsets = (
@@ -24,7 +25,7 @@ class UsersAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        (_("Important dates"), {"fields": ("last_login", 'date_joined')}),
     )
     add_fieldsets = (
         (
@@ -38,14 +39,13 @@ class UsersAdmin(admin.ModelAdmin):
     form = UsersChangeForms
     add_form = UsersCreationForms
     change_password_form = AdminPasswordChangeForm
-    list_display = ("username", "email", "first_name", "last_name", "is_staff", 'is_active', 'is_superuser')
+    list_display = ("username", "email", 'mobile_phone', "first_name", "last_name", "is_staff", 'is_active', 'is_superuser')
     list_filter = ("is_staff", "is_superuser", "is_active")
     search_fields = ("mobile_phone", "first_name", "last_name", "email")
+    readonly_fields = ('date_joined',)
     # ordering = ("emai",)
-    # filter_horizontal = (
-    #     "groups",
-    #     "user_permissions",
-    # )
+    filter_horizontal = ()
+    list_display_links = ('username', 'email', 'mobile_phone')
     
     
 @admin.register(UserMoreInformationModel)
