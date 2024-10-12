@@ -17,10 +17,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from shop import settings
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from decouple import config
+
+from shop.base import MEDIA_ROOT, MEDIA_URL
 
 urlpatterns = [
+    # YOUR PATTERNS
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    
-] + static(settings.MEDAI_URL, document_root=settings.MEDIA_ROOT)
+    path('api/blog/', include('blogs.urls', namespace='blogs')),
+]
+
+debug_mode = config("DEBUG", cast=bool, default=True)
+
+if debug_mode:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+    urlpatterns += debug_toolbar_urls()

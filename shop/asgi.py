@@ -8,9 +8,16 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
+from decouple import config
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shop.settings')
+
+debug_mode = config('DEBUG', cast=bool, default=True)
+
+if debug_mode:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shop.settings.development')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shop.settings.production')
 
 application = get_asgi_application()
