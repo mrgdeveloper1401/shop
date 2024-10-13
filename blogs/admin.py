@@ -22,6 +22,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['created_at', "updated_at", "is_publish"]
     date_hierarchy = 'created_at'
     inlines = [PostImagesInline]
+    list_display_links = ['show_all_author', "post_title"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
