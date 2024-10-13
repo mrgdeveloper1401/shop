@@ -17,11 +17,11 @@ class CategoryViewSet(ReadOnlyModelViewSet):
 class PostViewSet(ReadOnlyModelViewSet):
     lookup_field = 'post_slug'
     serializer_class = PostSerializer
-    queryset = (Post.objects.filter(is_publish=True).select_related('author').
-                prefetch_related('category', "tag_name", "fk_post_images_post__image"))
+    queryset = (Post.objects.filter(is_publish=True).
+                prefetch_related('category', "tag_name", "fk_post_images_post__image", "author"))
     
     def get_queryset(self):
         if self.kwargs:
             return (Post.objects.filter(category__category_slug=self.kwargs['category_category_slug']).filter(is_publish=True).
-                    select_related('author').prefetch_related('category', "tag_name", "fk_post_images_post__image"))
+                    prefetch_related('category', "tag_name", "fk_post_images_post__image", "author"))
         return super().get_queryset()

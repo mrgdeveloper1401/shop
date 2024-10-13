@@ -1,13 +1,15 @@
-from django.urls import path
-from . import views
+from django.urls import include
+from rest_framework.urls import path
+from rest_framework.routers import DefaultRouter
+
+from accounts.views import CreateOtpApiView, VerifyOtpApiView
+
+# router = DefaultRouter()
+# router.register('create_otp_code', CreateOtpViewSet, basename='otp')
 
 app_name = 'accounts'
 urlpatterns = [
-    # path('register/', views.UserRegisterView.as_view(), name='signup'),
-    # path('register/verify/', views.UserRegisterVerifyCodeView.as_view(), name='verify_account'),
-    # path('login/', views.LoginView.as_view(), name='login'),
-    # path('reset/', views.UserPasswordResetView.as_view(), name='password_reset_form'),
-    # path('reset/done/', views.UserPasswordResetDoneView.as_view(), name='password_reset_done'),
-    # path('reset/confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    # path('reset/complete/', views.UserPasswordResetComplateView.as_view(), name='password_reset_complete'),
+    # path('', include(router.urls)),
+    path('create_otp_code/', CreateOtpApiView.as_view(), name='create_otp_code'),
+    path('verify_otp/', VerifyOtpApiView.as_view(), name='verify_otp'),
 ]

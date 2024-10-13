@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from accounts.managers import UsersManager
 from django.utils import timezone
 
@@ -25,6 +25,9 @@ class User(AbstractBaseUser, CreateMixin, UpdateMixin, PermissionsMixin):
     )
 
     USERNAME_FIELD = 'mobile_phone'
+
+    def __str__(self):
+        return self.mobile_phone
 
     objects = UsersManager()
 
@@ -78,6 +81,8 @@ class Profile(CreateMixin, UpdateMixin):
 
     @property
     def get_full_name(self):
+        if self.first_name is None or self.last_name is None:
+            return self.user.mobile_phone
         return self.first_name + ' ' + self.last_name
 
     def __str__(self):
@@ -91,15 +96,25 @@ class Profile(CreateMixin, UpdateMixin):
 
 class Otp(CreateMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_otp')
-    code = models.PositiveIntegerField(_("code"), blank=True)
+    code = models.PositiveIntegerField(_("code"), default=0)
     expired_at = models.DateTimeField(_("expired at"), blank=True, null=True)
 
     @property
     def generate_code(self):
         from random import choices
         from string import digits
-        code = choices(digits, k=8)
+        code = int(''.join(choices(digits, k=8)))
         return code
+
+    @property
+    def check_expired_otp(self):
+        if self.expired_at < timezone.now():
+            return True
+        return False
+
+    def delete_otp_code(self):
+        if self.expired_at < timezone.now():
+            self.delete()
 
     def save(self, *args, **kwargs):
         self.code = self.generate_code

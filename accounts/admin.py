@@ -34,8 +34,8 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    list_display = ("mobile_phone", "is_active", "is_staff", "is_superuser")
-    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    list_display = ("mobile_phone", "is_active", "is_staff", "is_superuser", "is_verify")
+    list_filter = ("is_staff", "is_superuser", "is_active", "groups", "is_verify")
     search_fields = ("mobile_phone",)
     ordering = ("mobile_phone",)
     filter_horizontal = (
@@ -47,7 +47,9 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['first_name', "last_name", "user", "birth_date", "city"]
+    search_fields = ['first_name', "last_name", "user__mobile_phone", "city"]
+    list_display_links = ['first_name', 'last_name', "user"]
 
 
 @admin.register(City)
@@ -62,4 +64,4 @@ class StateAdmin(admin.ModelAdmin):
 
 @admin.register(Otp)
 class OtpAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['user', "code", "created_at", "expired_at"]

@@ -48,8 +48,8 @@ class PostCategory(MPTTModel, CreateMixin, UpdateMixin):
 
 class Post(CreateMixin, UpdateMixin, SoftDeleteMixin):
     category = models.ManyToManyField('PostCategory', related_name='post_category')
-    author = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="posts",
-                               limit_choices_to={"is_active": True, "is_staff": True})
+    author = models.ManyToManyField("accounts.User", related_name="posts",
+                                    limit_choices_to={"is_active": True, "is_staff": True, "is_verify": True})
     post_title = models.CharField(_("title post"), max_length=100)
     post_slug = models.SlugField(_("post slug"), max_length=100, allow_unicode=True)
     post_body = models.TextField(_("post body"))
@@ -58,7 +58,7 @@ class Post(CreateMixin, UpdateMixin, SoftDeleteMixin):
     tag_name = models.ManyToManyField(Tag, related_name='post_tags')
 
     def __str__(self):
-        return self.author.mobile_phone
+        return self.post_title
 
     @property
     def all_image(self):
